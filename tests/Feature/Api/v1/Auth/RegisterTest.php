@@ -3,9 +3,7 @@
 namespace Tests\Feature\Api\v1\Auth;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
-
 
 class RegisterTest extends TestCase
 {
@@ -17,34 +15,31 @@ class RegisterTest extends TestCase
      */
     public function test_register()
     {
-        $response = $this->post('/api/v1/register',[
-            'email'=>'client@test.com'
-        ]);
+        $response = $this->post('/api/v1/register', ['email' => 'client@test.com',], ['Accept' => 'application/json']);
 
         $response->assertStatus(201);
 
-        $response->assertJsonStructure(['user'=>['email'],'token']);
-        
+        $response->assertJsonStructure(['user' => ['email'], 'token']);
+
         $email = $response->json('user.email');
-        $this->assertEquals('client@test.com',$email);
+        $this->assertEquals('client@test.com', $email);
 
         $token = $response->json('token');
-        $this->assertEquals('42',strlen($token));
+        $this->assertEquals('42', strlen($token));
     }
 
-    public function test_email_is_required(){
-        $response = $this->post('/api/v1/register');
+    public function test_email_is_required()
+    {
+        $response = $this->post('/api/v1/register', [], ['Accept' => 'application/json']);
 
+        $response->assertStatus(422);
         $response->assertInvalid(['email']);
     }
 
-    public function test_email_is_unique(){
-        $response = $this->post('/api/v1/register',[
-            'email'=>'client@test.com'
-        ]);
-        $response = $this->post('/api/v1/register',[
-            'email'=>'client@test.com'
-        ]);
+    public function test_email_is_unique()
+    {
+        $response = $this->post('/api/v1/register', ['email' => 'client@test.com'], ['Accept' => 'application/json']);
+        $response = $this->post('/api/v1/register', ['email' => 'client@test.com'], ['Accept' => 'application/json']);
 
         $response->assertInvalid('email');
     }
