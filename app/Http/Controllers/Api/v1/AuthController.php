@@ -4,12 +4,17 @@ namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\v1\LoginRequest;
+use App\Http\Requests\Api\v1\LogoutRequest;
 use App\Http\Requests\Api\v1\RegisterRequest;
 use App\Models\User;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
 {
+    use RefreshDatabase;
+    
     public function register(RegisterRequest $request)
     {
 
@@ -34,5 +39,10 @@ class AuthController extends Controller
         , 200)->withHeaders([
         'Content-Type' => 'application/json',
     ]);
+    }
+
+    public function logout(LogoutRequest $request){
+        Auth::user()->tokens()->delete();
+        return response(json_encode('Logged out'),200)->withHeaders(['Content-Type'=>'application/json']);
     }
 }
