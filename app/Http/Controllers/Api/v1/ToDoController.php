@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\v1;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Api\v1\DeleteToDoRequest;
 use App\Http\Requests\Api\v1\StoreToDoRequest;
 use App\Models\ToDo;
 use App\Models\ToDoList;
@@ -93,6 +94,15 @@ class ToDoController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $toDo = ToDo::find($id);
+       
+        if(Auth::user()->can('delete',$toDo)){
+            $toDo->toDoList->rearrangeAfterToDoIsRemoved($toDo);
+            ToDo::destroy($id);
+            return response('',204);
+        }
+        
+        return response('',404);
     }
+
 }

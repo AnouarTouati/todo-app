@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Api\v1;
 
+use App\Models\ToDo;
 use App\Models\ToDoList;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -43,5 +44,35 @@ class ToDoTest extends TestCase
         $this->assertEquals($toDoList->id,$toDoListId);
         $toDoTitle = $response->json('title');
         $this->assertEquals('A to do',$toDoTitle);
+    }
+
+    public function test_delete_a_to_do()
+    {
+        $user = User::create(['email'=>'client@test.com']);
+        $token = $user->createToken('token123')->plainTextToken;
+
+ 
+        $toDoList = new ToDoList();
+        $toDoList->user()->associate($user);
+        $toDoList->save();
+        $toDoList= $user->toDoLists()->orderBy('id', 'desc')->first();
+
+        $toDo = new ToDo();
+        $toDo->toDoList()->associate($toDoList);
+        $toDo->title = 'a title';
+        $toDo->description = 'descr';
+        
+        $toDo->order = 0;
+        $toDo->save();
+        $toDo = $toDoList->toDos()->orderBy('id', 'desc')->first();
+      
+
+        $response = $this->delete('/api/v1/to-do/'.$toDo->id,[],
+                            ['Accept'=>'application/json',
+                            'Authorization'=>'Bearer '.$token
+                        ]);
+        
+        $response->assertStatus(204);
+
     }
 }

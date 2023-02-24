@@ -28,6 +28,7 @@ Route::group(['prefix'=>'v1'],function(){
         Route::delete('/to-do-lists/{id}',[ToDoListController::class,'destroy']);
 
         Route::post('/to-do',[ToDoController::class,'store']);
+        Route::delete('/to-do/{id}',[ToDoController::class,'destroy']);
 
         Route::post('/logout',[AuthController::class,'logout']);
     });
