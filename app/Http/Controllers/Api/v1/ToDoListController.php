@@ -18,7 +18,8 @@ class ToDoListController extends Controller
      */
     public function index()
     {
-        //
+      $toDoLists = Auth::user()->toDoLists;
+      return response(json_encode($toDoLists),200)->withHeaders(['Content-Type'=>'application/json']);
     }
 
     /**
@@ -47,7 +48,8 @@ class ToDoListController extends Controller
      */
     public function show($id)
     {
-        //
+       $toDoList = Auth::user()->toDoLists()->find($id);
+       return response(json_encode($toDoList),200)->withHeaders(['Content-Type'=>'application/json']);
     }
 
     /**

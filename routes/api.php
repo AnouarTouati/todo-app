@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\v1\AuthController;
 use App\Http\Controllers\Api\v1\ToDoListController;
+use App\Models\ToDoList;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -17,12 +18,13 @@ use Illuminate\Support\Facades\Route;
 */
 Route::group(['prefix'=>'v1'],function(){
     Route::post('/register',[AuthController::class,'register']);
-    Route::post('/login',[AuthController::class,'login']);
+    Route::post('/login',[AuthController::class,'login'])->name('login');
     
     Route::group(['middleware'=>'auth:sanctum'],function(){
-
-        Route::post('/to-do-list',[ToDoListController::class,'store']);
-        Route::delete('/to-do-list/{id}',[ToDoListController::class,'destroy']);
+        Route::get('/to-do-lists',[ToDoListController::class,'index']);
+        Route::get('/to-do-lists/{id}',[ToDoListController::class,'show']);
+        Route::post('/to-do-lists',[ToDoListController::class,'store']);
+        Route::delete('/to-do-lists/{id}',[ToDoListController::class,'destroy']);
 
         Route::post('/logout',[AuthController::class,'logout']);
     });
