@@ -75,4 +75,41 @@ class ToDoTest extends TestCase
         $response->assertStatus(204);
 
     }
+
+    public function test_delete_a_to_do_from_a_filled_list()
+    {
+        $user = User::create(['email'=>'client@test.com']);
+        $token = $user->createToken('token123')->plainTextToken;
+
+ 
+        $toDoList = new ToDoList();
+        $toDoList->user()->associate($user);
+        $toDoList->save();
+        $toDoList= $user->toDoLists()->orderBy('id', 'desc')->first();
+
+        for($i=0;$i<10;$i++){
+            $toDo = new ToDo();
+            $toDo->toDoList()->associate($toDoList);
+            $toDo->title = 'a title';
+            $toDo->description = 'descr';
+            
+            $toDo->order = $i;
+            $toDo->save();
+        }
+      
+        $toDo = $toDoList->toDos()->where('order', 6)->first();
+      
+
+        $response = $this->delete('/api/v1/to-do/'.$toDo->id,[],
+                            ['Accept'=>'application/json',
+                            'Authorization'=>'Bearer '.$token
+                        ]);
+        
+        $response->assertStatus(204);
+        $this->assertEquals(9,$toDoList->toDos()->count());
+        $toDos = $toDoList->toDos()->orderBy('order','asc')->get();
+        for($i=0;$i<9;$i++){
+            $this->assertEquals($i, $toDos[$i]->order);
+        }
+    }
 }
