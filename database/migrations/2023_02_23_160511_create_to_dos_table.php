@@ -15,8 +15,11 @@ return new class extends Migration
     {
         Schema::create('to_dos', function (Blueprint $table) {
             $table->id();
+            $table->string('title');
+            $table->text('description')->nullable();
+            $table->date('end_date')->nullable();
             $table->foreignId('to_do_list_id')->constrained()->onDelete('cascade');
-            $table->foreignId('parent_to_do_id')->constrained('to_dos')->onDelete('cascade');
+            $table->foreignId('parent_to_do_id')->nullable()->constrained('to_dos')->onDelete('cascade');
             $table->integer('order',false,true);
             $table->boolean('toggled')->default(false);
             $table->timestamps();

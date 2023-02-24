@@ -30,9 +30,6 @@ class ToDoListController extends Controller
      */
     public function store(StoreToDoListRequest $request)
     {
-        if($request->name == null){
-            $request->replace(['name'=>'a to do list']);
-        }
        $toDoList = new ToDoList();
        $toDoList->user()->associate(Auth::user());
        $toDoList->save();

@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\v1\AuthController;
+use App\Http\Controllers\Api\v1\ToDoController;
 use App\Http\Controllers\Api\v1\ToDoListController;
 use App\Models\ToDoList;
 use Illuminate\Http\Request;
@@ -25,6 +26,8 @@ Route::group(['prefix'=>'v1'],function(){
         Route::get('/to-do-lists/{id}',[ToDoListController::class,'show']);
         Route::post('/to-do-lists',[ToDoListController::class,'store']);
         Route::delete('/to-do-lists/{id}',[ToDoListController::class,'destroy']);
+
+        Route::post('/to-do',[ToDoController::class,'store']);
 
         Route::post('/logout',[AuthController::class,'logout']);
     });
