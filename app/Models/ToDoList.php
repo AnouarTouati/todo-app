@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class ToDoList extends Model
 {
     use HasFactory;
-    protected $fillable =[];
+    protected $fillable =['name'];
    
     public function toDos(){
         return $this->hasMany(ToDo::class);

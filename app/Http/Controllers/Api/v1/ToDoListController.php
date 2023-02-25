@@ -35,6 +35,7 @@ class ToDoListController extends Controller
     {
         $toDoList = new ToDoList();
         $toDoList->user()->associate(Auth::user());
+        $toDoList->name = $request->name;
         $toDoList->save();
 
         return response(json_encode(['toDoList' => $toDoList]), 201)->withHeaders(['Content-Type' => 'application/json']);

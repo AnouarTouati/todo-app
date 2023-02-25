@@ -66,6 +66,7 @@ class ToDoListTest extends TestCase
         for($i=0;$i< $numberOfLists;$i++){
             $toDoList = new ToDoList();
             $toDoList->user()->associate($user);
+            $toDoList->name='a name';
             $toDoList->save();
         }
         $toDoList= $user->toDoLists()->orderBy('id', 'desc')->first();
@@ -77,6 +78,8 @@ class ToDoListTest extends TestCase
         $id = $reponse->json('id');
        
         $this->assertEquals($toDoList->id,$id);
+        $name = $reponse->json('name');
+        $this->assertEquals('a name',$name);
     }
 
     public function test_move_a_to_do_from_high_order_to_low(){
