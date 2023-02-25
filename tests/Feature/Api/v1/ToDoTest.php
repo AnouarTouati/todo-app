@@ -141,4 +141,31 @@ class ToDoTest extends TestCase
         $this->assertEquals('title2',$toDo->title);
         
     }
+    public function test_view_a_to_do(){
+        $user = User::create(['email'=>'client@test.com']);
+        $token = $user->createToken('token123')->plainTextToken;
+
+ 
+        $toDoList = new ToDoList();
+        $toDoList->user()->associate($user);
+        $toDoList->save();
+        $toDoList= $user->toDoLists()->orderBy('id', 'desc')->first();
+
+        $toDo= new Todo();
+        $toDo->title='title1';
+        $toDo->order = 0;
+        $toDo->toDoList()->associate($toDoList);
+        $toDo->save();
+        $toDo= $toDoList->toDos()->orderBy('id', 'desc')->first();
+
+        $response = $this->get('/api/v1/to-dos/'.$toDo->id,
+                            ['Accept'=>'application/json',
+                            'Authorization'=>'Bearer '.$token
+                        ]);
+        
+        $response->assertStatus(200);
+        $id= $response->json('id');
+        $this->assertEquals($toDo->id,$id);
+        
+    }
 }

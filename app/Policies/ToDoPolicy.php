@@ -30,7 +30,10 @@ class ToDoPolicy
      */
     public function view(User $user, ToDo $toDo)
     {
-        //
+        if ($user->id == $toDo->toDoList->user->id) {
+            return true;
+        }
+        return false;
     }
 
     /**

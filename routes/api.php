@@ -26,8 +26,9 @@ Route::group(['prefix'=>'v1'],function(){
         Route::get('/to-do-lists/{id}',[ToDoListController::class,'show']);
         Route::post('/to-do-lists',[ToDoListController::class,'store']);
         Route::delete('/to-do-lists/{id}',[ToDoListController::class,'destroy']);
-        // Route::post('/to-do-lists/{list-id}/swap/{to-do-1-id}/{to-do-2-id}',[ToDoListController::class,'swap']);
-
+        // Route::post('/to-do-lists/{list-id}/move/{to-do-1-id}/above/{to-do-2-id}',[ToDoListController::class,'moveAbove']);
+       
+        Route::get('/to-dos/{id}',[ToDoController::class,'show']);
         Route::put('/to-do/{id}',[ToDoController::class,'update']);
         Route::post('/to-do',[ToDoController::class,'store']);
         Route::delete('/to-do/{id}',[ToDoController::class,'destroy']);

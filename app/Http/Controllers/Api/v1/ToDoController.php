@@ -21,7 +21,7 @@ class ToDoController extends Controller
      */
     public function index()
     {
-        //
+        
     }
 
     /**
@@ -72,7 +72,11 @@ class ToDoController extends Controller
      */
     public function show($id)
     {
-        //
+        $toDo = ToDo::find($id);
+        if(Auth::user()->can('view',$toDo)){
+            return response(json_encode($toDo,200));
+        }
+        return response('',404);
     }
 
     /**
