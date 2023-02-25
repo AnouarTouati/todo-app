@@ -29,9 +29,9 @@ Route::group(['prefix'=>'v1'],function(){
         // Route::post('/to-do-lists/{list-id}/move/{to-do-1-id}/above/{to-do-2-id}',[ToDoListController::class,'moveAbove']);
        
         Route::get('/to-dos/{id}',[ToDoController::class,'show']);
-        Route::put('/to-do/{id}',[ToDoController::class,'update']);
-        Route::post('/to-do',[ToDoController::class,'store']);
-        Route::delete('/to-do/{id}',[ToDoController::class,'destroy']);
+        Route::put('/to-dos/{id}',[ToDoController::class,'update']);
+        Route::post('/to-dos',[ToDoController::class,'store']);
+        Route::delete('/to-dos/{id}',[ToDoController::class,'destroy']);
 
         Route::post('/logout',[AuthController::class,'logout']);
     });

@@ -29,7 +29,7 @@ class ToDoTest extends TestCase
 
         $toDoList= $user->toDoLists()->orderBy('id', 'desc')->first();
 
-        $response = $this->post('/api/v1/to-do',['to_do_list_id'=>$toDoList->id,
+        $response = $this->post('/api/v1/to-dos',['to_do_list_id'=>$toDoList->id,
                                                     'title'=>'A to do',
                                                     'description'=>'Lorem .....',
                                                     'end_date'=>'2020-07-01'
@@ -67,7 +67,7 @@ class ToDoTest extends TestCase
         $toDo = $toDoList->toDos()->orderBy('id', 'desc')->first();
       
 
-        $response = $this->delete('/api/v1/to-do/'.$toDo->id,[],
+        $response = $this->delete('/api/v1/to-dos/'.$toDo->id,[],
                             ['Accept'=>'application/json',
                             'Authorization'=>'Bearer '.$token
                         ]);
@@ -100,7 +100,7 @@ class ToDoTest extends TestCase
         $toDo = $toDoList->toDos()->where('order', 6)->first();
       
 
-        $response = $this->delete('/api/v1/to-do/'.$toDo->id,[],
+        $response = $this->delete('/api/v1/to-dos/'.$toDo->id,[],
                             ['Accept'=>'application/json',
                             'Authorization'=>'Bearer '.$token
                         ]);
@@ -130,7 +130,7 @@ class ToDoTest extends TestCase
         $toDo->save();
         $toDo= $toDoList->toDos()->orderBy('id', 'desc')->first();
 
-        $response = $this->put('/api/v1/to-do/'.$toDo->id,['title'=>'title2',
+        $response = $this->put('/api/v1/to-dos/'.$toDo->id,['title'=>'title2',
                                                 ],
                             ['Accept'=>'application/json',
                             'Authorization'=>'Bearer '.$token
