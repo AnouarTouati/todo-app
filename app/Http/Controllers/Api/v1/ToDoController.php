@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\v1;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\v1\DeleteToDoRequest;
 use App\Http\Requests\Api\v1\StoreToDoRequest;
+use App\Http\Requests\Api\v1\UpdateToDoRequest;
 use App\Models\ToDo;
 use App\Models\ToDoList;
 use Illuminate\Http\Request;
@@ -81,9 +82,27 @@ class ToDoController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(UpdateToDoRequest $request, $id)
     {
-        //
+        $toDo = ToDo::find($id);
+        if(Auth::user()->can('update',$toDo)){
+            if($request->title){
+                $toDo->title = $request->title;
+            }
+            if($request->description){
+                $toDo->title = $request->description;
+            }
+            if(isset($request->toggled)){
+                $toDo->title = $request->toggled;
+            }
+            if($request->end_date){
+                $toDo->title = Carbon::create($request->end_date);
+            }
+            $toDo->save();
+            
+            return response('',204);
+        }
+        return response('',404);
     }
 
     /**

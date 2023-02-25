@@ -53,7 +53,10 @@ class ToDoPolicy
      */
     public function update(User $user, ToDo $toDo)
     {
-        //
+        if ($user->id == $toDo->toDoList->user->id) {
+            return true;
+        }
+        return false;
     }
 
     /**
