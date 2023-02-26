@@ -121,5 +121,50 @@ class ToDoListController extends Controller
         }
         return response('', 204);
     }
+    public function moveBelow(MoveAboveRequest $request, $movingToDoId, $targetToDoId)
+    {
+        Log::debug('move below called');
+        $movingToDo = ToDo::find($movingToDoId);
+        $targetToDo = ToDo::find($targetToDoId);
+
+        if ($targetToDo->order > $movingToDo->order) {
+            
+            $toDosThatNeedToChange = $movingToDo->toDoList->toDos()->where('order', '>', $movingToDo->order)->where('order', '<=', $targetToDo->order)->get();
+
+            Log::debug('Moving to do order ' . $movingToDo->order);
+            Log::debug('Target to do order ' . $targetToDo->order);
+            $movingToDo->order = $targetToDo->order;
+            $movingToDo->save();
+            Log::debug('New Moving to do order ' . $movingToDo->order);
+
+            foreach ($toDosThatNeedToChange as $toDo) {
+                Log::debug('Order' . $toDo->order);
+                Log::debug('Order became' . $toDo->order - 1);
+                $toDo->order -= 1;
+                $toDo->save();
+            }
+
+        } else {
+            $toDosThatNeedToChange = $movingToDo->toDoList->toDos()->where('order', '>', $targetToDo->order)->where('order', '<', $movingToDo->order)->get();
+
+            Log::debug('Moving to do order ' . $movingToDo->order);
+            Log::debug('Target to do order ' . $targetToDo->order);
+            $movingToDo->order = $targetToDo->order +1;
+            $movingToDo->save();
+            Log::debug('New Moving to do order ' . $movingToDo->order);
+            foreach ($toDosThatNeedToChange as $toDo) {
+                Log::debug('Order' . $toDo->order);
+                Log::debug('Order became' . $toDo->order + 1);
+                $toDo->order += 1;
+                $toDo->save();
+            }
+        }
+
+        Log::debug('result');
+        foreach ($movingToDo->toDoList->toDos()->orderBy('order', 'asc')->get() as $toDo) {
+            Log::debug($toDo->order);
+        }
+        return response('', 204);
+    }
 
 }
