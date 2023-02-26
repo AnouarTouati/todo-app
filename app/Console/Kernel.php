@@ -2,8 +2,13 @@
 
 namespace App\Console;
 
+use App\Mail\ToDoReminder;
+use App\Models\ToDo;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
+use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 
 class Kernel extends ConsoleKernel
 {
@@ -16,6 +21,13 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         // $schedule->command('inspire')->hourly();
+        $schedule->call(function(){
+           $toDos = ToDo::whereDate('end_date',Carbon::today()->toDateString())->get();
+           foreach($toDos as $toDo){
+            Mail::to($toDo->toDoList->user->email)->send(new ToDoReminder($toDo));
+           }
+        })->dailyAt('08:00');
+
     }
 
     /**
