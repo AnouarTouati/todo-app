@@ -13,6 +13,12 @@ class ToDo extends Model
         'description',
         'end_date'
     ];
+    protected $hidden = [
+        'created_at',
+        'updated_at',
+        'to_do_list',
+        'toDoList'
+    ];
     public function toDoList(){
         return $this->belongsTo(ToDoList::class);
     }

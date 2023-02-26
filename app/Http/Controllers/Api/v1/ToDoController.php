@@ -11,6 +11,7 @@ use App\Models\ToDoList;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class ToDoController extends Controller
 {
@@ -33,7 +34,13 @@ class ToDoController extends Controller
     public function store(StoreToDoRequest $request)
     {
         $toDoList = Auth::user()->toDoLists()->find($request->to_do_list_id);
-        $order = $this->getTheHighestOrderInTheList($toDoList) + 1;
+        if($toDoList->toDos()->count() > 0){
+            $order = $toDoList->toDos()->max('order') + 1;
+        }else{
+            //if no rows exists then order is 0
+            $order = 0;
+        }
+       
 
         $toDo = new ToDo();
         $toDo->toDoList()->associate($toDoList);
@@ -44,24 +51,6 @@ class ToDoController extends Controller
         $toDo->save();
 
         return response(json_encode($toDo),201);
-    }
-
-    /**
-     * Gets the order of the highest non embeded ToDo in a ToDoList.
-     * @param \App\Models\ToDoList $toDoList
-     * @return Int returns -1 if list is empty
-     */
-    private function getTheHighestOrderInTheList(ToDoList $toDoList){
-        $result = -1;
-        foreach($toDoList->toDos as $toDo){
-            
-            if($toDo->isEmbedded() == false){
-                if($result < $toDo->id){
-                    $result = $toDo->id;
-                }
-            }
-        }
-        return $result;
     }
     
     /**

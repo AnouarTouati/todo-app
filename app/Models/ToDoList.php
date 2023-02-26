@@ -9,7 +9,12 @@ class ToDoList extends Model
 {
     use HasFactory;
     protected $fillable =['name'];
-   
+    protected $hidden = [
+        'created_at',
+        'updated_at',
+        'user',
+        'user_id'
+    ];
     public function toDos(){
         return $this->hasMany(ToDo::class);
     }
