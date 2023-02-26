@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\v1;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\v1\DeleteToDoRequest;
+use App\Http\Requests\Api\v1\GetToDosFromAListRequest;
 use App\Http\Requests\Api\v1\StoreToDoRequest;
 use App\Http\Requests\Api\v1\UpdateToDoRequest;
 use App\Models\ToDo;
@@ -20,9 +21,12 @@ class ToDoController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(GetToDosFromAListRequest $request)
     {
-        
+        $toDoList = ToDoList::find($request->list_id);
+        return response($toDoList->toDos,'200')->withHeaders([
+            'Content-Type'=>'application/json'
+        ]);
     }
 
     /**

@@ -29,7 +29,8 @@ Route::group(['prefix'=>'v1'],function(){
         Route::post('/to-do-lists/move/{movingtodo}/above/{targettodo}',[ToDoListController::class,'moveAbove']);
         Route::post('/to-do-lists/move/{movingtodo}/below/{targettodo}',[ToDoListController::class,'moveBelow']);
        //Update todo list name route
-       //get all todos for a single list route is missing
+      
+        Route::get('/to-dos/list/{list_id}',[ToDoController::class,'index']);
         Route::get('/to-dos/{id}',[ToDoController::class,'show']);
         Route::put('/to-dos/{id}',[ToDoController::class,'update']);
         Route::post('/to-dos',[ToDoController::class,'store']);
